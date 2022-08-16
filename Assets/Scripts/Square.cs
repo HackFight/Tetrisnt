@@ -5,12 +5,14 @@ using UnityEngine;
 public class Square : MonoBehaviour
 {
 
-    public float speed;
     private bool onConveyor = false;
-    public bool _inFrontOfSpray = false;
-    public bool noMoreSparay = false;
+    private bool _inFrontOfSpray = false;
+    private bool noMoreSparay = false;
+    public SquareData squareData;
 
-    public List<GameObject> conveyors = new List<GameObject>();
+    private Vector3 conveyorDir;
+
+    private List<GameObject> conveyors = new List<GameObject>();
 
     private Collider2D squareCollider;
 
@@ -23,7 +25,7 @@ public class Square : MonoBehaviour
     {
         if(onConveyor && !_inFrontOfSpray)
         {
-            transform.Translate(conveyors[0].GetComponent<Conveyor>().direction * speed * Time.deltaTime);
+            transform.Translate(conveyorDir * squareData.GetSpeed() * Time.deltaTime);
         }
     }
 
@@ -32,6 +34,7 @@ public class Square : MonoBehaviour
         if(other.tag == "Conveyor")
         {
             conveyors.Add(other.gameObject);
+            conveyorDir = conveyors[0].GetComponent<Conveyor>().direction;
             onConveyor = true;
         }
     }
@@ -41,19 +44,31 @@ public class Square : MonoBehaviour
         if(other.tag == "Conveyor")
         {
             conveyors.Remove(other.gameObject);
-            onConveyor = false;
-        }
-    }
 
-    public void InFrontOfSpray()
-    {
-        _inFrontOfSpray = true;
-        Invoke("leaveSpray", 1);
+            if(conveyors.Count <= 0)
+            {
+                onConveyor = false;
+            }
+            else
+            {
+                conveyorDir = conveyors[0].GetComponent<Conveyor>().direction;
+                onConveyor = true;
+            }
+        }
     }
 
     private void leaveSpray()
     {
         _inFrontOfSpray = false;
         noMoreSparay = true;
+    }
+
+    public void InFrontOfSpray()
+    {
+        if(!noMoreSparay)
+        {
+            _inFrontOfSpray = true;
+        Invoke("leaveSpray", 1);
+        }
     }
 }
