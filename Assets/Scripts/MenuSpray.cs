@@ -2,13 +2,15 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Spray : MonoBehaviour
+public class MenuSpray : MonoBehaviour
 {
     public float sprayOffset;
 
     private List<GameObject> squaresInFrontOfSpray = new List<GameObject>();
 
     [Range(0,4)]public int sprayColor;
+
+    [SerializeField] private MenuManager _menuManager;
 
     void Start()
     {
@@ -24,6 +26,7 @@ public class Spray : MonoBehaviour
             if(square.transform.position.y >= transform.position.y - sprayOffset && square.gameObject.transform.position.y <= transform.position.y + sprayOffset)
             {
                 squareScript.InFrontOfSpray(sprayColor);
+                _menuManager.ColoredSquare(sprayColor);
             }
         }
     }

@@ -10,6 +10,10 @@ public class Square : MonoBehaviour
     private bool noMoreSparay = false;
     public SquareData squareData;
 
+    private SpriteRenderer _spriteRenderer;
+
+    private int _type;
+
     private Vector3 conveyorDir;
 
     private List<GameObject> conveyors = new List<GameObject>();
@@ -18,7 +22,9 @@ public class Square : MonoBehaviour
 
     void Start()
     {
-        squareCollider = gameObject.GetComponent<Collider2D>();
+        squareCollider = GetComponent<Collider2D>();
+
+        _spriteRenderer = GetComponent<SpriteRenderer>();
     }
 
     void Update()
@@ -60,15 +66,25 @@ public class Square : MonoBehaviour
     private void leaveSpray()
     {
         _inFrontOfSpray = false;
-        noMoreSparay = true;
     }
 
-    public void InFrontOfSpray()
+    public void InFrontOfSpray(int type)
     {
         if(!noMoreSparay)
         {
+            noMoreSparay = true;
             _inFrontOfSpray = true;
-        Invoke("leaveSpray", 1);
+            SetType(type);
+            Invoke("leaveSpray", 1);
+        }
+    }
+
+    public void SetType(int type)
+    {
+        if(type != 0)
+        {
+            _type = type;
+            _spriteRenderer.color = squareData.GetColor(type - 1);
         }
     }
 }
