@@ -10,11 +10,15 @@ public class SquaresSpawner : MonoBehaviour
 
     private void Start() 
     {
-        InvokeRepeating("SpawnSquare", SpawnCooldown, SpawnCooldown);
+        StartCoroutine(SpawnSquare());
     }
 
-    void SpawnSquare()
+    IEnumerator SpawnSquare()
     {
-        Instantiate(baseSquare, transform.position, transform.rotation);
+        while(true)
+        {
+            Instantiate(baseSquare, transform.position, transform.rotation);
+            yield return new WaitForSeconds(SpawnCooldown);
+        }
     }
 }

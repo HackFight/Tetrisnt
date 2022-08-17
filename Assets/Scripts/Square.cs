@@ -9,16 +9,33 @@ public class Square : MonoBehaviour
     private bool _inFrontOfSpray = false;
     private bool noMoreSparay = false;
     public SquareData squareData;
+    private SprayControls _sprayControls;
 
     private SpriteRenderer _spriteRenderer;
 
     private int _type;
+    private bool typeSet;
 
     private Vector3 conveyorDir;
 
     private List<GameObject> conveyors = new List<GameObject>();
 
     private Collider2D squareCollider;
+
+    private void Awake() 
+    {
+        _sprayControls = new SprayControls();
+    }
+
+    private void OnEnable() 
+    {
+        _sprayControls.Enable();
+    }
+
+    private void OnDisable() 
+    {
+        _sprayControls.Disable();
+    }
 
     void Start()
     {
@@ -32,6 +49,26 @@ public class Square : MonoBehaviour
         if(onConveyor && !_inFrontOfSpray)
         {
             transform.Translate(conveyorDir * squareData.GetSpeed() * Time.deltaTime);
+        }
+
+        if(_inFrontOfSpray)
+        {
+            if(_sprayControls.Spray.Paint1.triggered)
+        {
+            SetType(1);
+        }
+        else if(_sprayControls.Spray.Paint2.triggered)
+        {
+            SetType(2);
+        }
+        else if(_sprayControls.Spray.Paint3.triggered)
+        {
+            SetType(3);
+        }
+        else if(_sprayControls.Spray.Paint4.triggered)
+        {
+            SetType(4);
+        }
         }
     }
 
@@ -68,21 +105,21 @@ public class Square : MonoBehaviour
         _inFrontOfSpray = false;
     }
 
-    public void InFrontOfSpray(int type)
+    public void InFrontOfSpray()
     {
         if(!noMoreSparay)
         {
             noMoreSparay = true;
             _inFrontOfSpray = true;
-            SetType(type);
             Invoke("leaveSpray", 1);
         }
     }
 
     public void SetType(int type)
     {
-        if(type != 0)
+        if(type != 0 && !typeSet)
         {
+            typeSet = true;
             _type = type;
             _spriteRenderer.color = squareData.GetColor(type - 1);
         }

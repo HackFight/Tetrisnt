@@ -25,7 +25,7 @@ public class MenuSpray : MonoBehaviour
 
             if(square.transform.position.y >= transform.position.y - sprayOffset && square.gameObject.transform.position.y <= transform.position.y + sprayOffset)
             {
-                squareScript.InFrontOfSpray(sprayColor);
+                squareScript.InFrontOfSpray();
                 _menuManager.ColoredSquare(sprayColor);
             }
         }
