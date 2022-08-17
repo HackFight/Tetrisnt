@@ -10,11 +10,6 @@ public class Spray : MonoBehaviour
 
     [Range(0,4)]public int sprayColor;
 
-    void Start()
-    {
-
-    }
-
     void Update()
     {
         foreach (GameObject square in squaresInFrontOfSpray)
@@ -23,7 +18,7 @@ public class Spray : MonoBehaviour
 
             if(square.transform.position.y >= transform.position.y - sprayOffset && square.gameObject.transform.position.y <= transform.position.y + sprayOffset)
             {
-                squareScript.InFrontOfSpray(sprayColor);
+                squareScript.InFrontOfSpray();
             }
         }
     }
