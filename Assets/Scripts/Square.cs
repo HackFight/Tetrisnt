@@ -121,7 +121,7 @@ public class Square : MonoBehaviour
         {
             typeSet = true;
             _type = type;
-            _spriteRenderer.color = squareData.GetColor(type - 1);
+            _spriteRenderer.sprite = squareData.GetSprite(type - 1);
         }
     }
 }
