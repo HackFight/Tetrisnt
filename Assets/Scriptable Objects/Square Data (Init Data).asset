@@ -12,10 +12,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 108b1a6b253180e4f92e17e7ed4abfe8, type: 3}
   m_Name: Square Data (Init Data)
   m_EditorClassIdentifier: Assembly-CSharp::SquareVisuals
-  _speed: 1
-  _baseSquareSprite: {fileID: 21300000, guid: f4e87ba2bc20fad4a8a4177c506bbd77, type: 3}
+  _speed: 1.25
+  _baseSquareSprite: {fileID: 21300000, guid: c9d5617d68f8b364a83220f9acbb47e7, type: 3}
   _sprites:
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
+  - {fileID: 21300000, guid: ef41b33b8d613f64c981a03a571af603, type: 3}
+  - {fileID: 21300000, guid: 0938ada0129c732419cc8a6244e979b9, type: 3}
+  - {fileID: 21300000, guid: 9b113752557cc1f408d06d50c3e5ae75, type: 3}
+  - {fileID: 21300000, guid: 7a12ce254daadfa488faca2180a41022, type: 3}

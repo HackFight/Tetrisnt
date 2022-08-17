@@ -29,4 +29,9 @@ public class SquareData : ScriptableObject
     {
         return _speed;
     }
+
+    public Sprite GetBaseSprite()
+    {
+        return _baseSquareSprite;
+    }
 }

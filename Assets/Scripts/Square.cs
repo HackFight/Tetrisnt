@@ -1,15 +1,20 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
+[RequireComponent(typeof(Collider2D), typeof(SpriteRenderer))]
 public class Square : MonoBehaviour
 {
+    private const int PLAYER_INDEX = 0;
 
     private bool onConveyor = false;
     private bool _inFrontOfSpray = false;
+    private bool _inFrontOfBuilder = false;
     private bool noMoreSparay = false;
+    private bool noMoreBuilder = false;
     public SquareData squareData;
-    private SprayControls _sprayControls;
+    // private SprayControls _sprayControls;
 
     private SpriteRenderer _spriteRenderer;
 
@@ -22,19 +27,25 @@ public class Square : MonoBehaviour
 
     private Collider2D squareCollider;
 
-    private void Awake() 
+    private PlayerInputReciever _playerInputReciever;
+
+    private void Awake()
     {
-        _sprayControls = new SprayControls();
+        // _sprayControls = new SprayControls();
+
+        PlayerInputReciever[] recievers = FindObjectsOfType<PlayerInputReciever>();
+
+        _playerInputReciever = recievers.FirstOrDefault(i => i.PlayerIndex == PLAYER_INDEX);
     }
 
-    private void OnEnable() 
+    private void OnEnable()
     {
-        _sprayControls.Enable();
+        // _sprayControls.Enable();
     }
 
-    private void OnDisable() 
+    private void OnDisable()
     {
-        _sprayControls.Disable();
+        // _sprayControls.Disable();
     }
 
     void Start()
@@ -42,39 +53,56 @@ public class Square : MonoBehaviour
         squareCollider = GetComponent<Collider2D>();
 
         _spriteRenderer = GetComponent<SpriteRenderer>();
+
+        _spriteRenderer.sprite = squareData.GetBaseSprite();
     }
 
     void Update()
     {
-        if(onConveyor && !_inFrontOfSpray)
+        if (onConveyor && !_inFrontOfSpray && !_inFrontOfBuilder)
         {
             transform.Translate(conveyorDir * squareData.GetSpeed() * Time.deltaTime);
         }
 
-        if(_inFrontOfSpray)
+        if (_inFrontOfSpray)
         {
-            if(_sprayControls.Spray.Paint1.triggered)
-        {
-            SetType(1);
+            if (_playerInputReciever.ButtonEast)
+            {
+                _playerInputReciever.ButtonEast = false;
+
+                SetType(1);
+            }
+            else if (_playerInputReciever.ButtonSouth)
+            {
+                _playerInputReciever.ButtonSouth = false;
+
+                SetType(2);
+            }
+            else if (_playerInputReciever.ButtonWest)
+            {
+                _playerInputReciever.ButtonWest = false;
+
+                SetType(3);
+            }
+            else if (_playerInputReciever.ButtonNorth)
+            {
+                _playerInputReciever.ButtonNorth = false;
+
+                SetType(4);
+            }
         }
-        else if(_sprayControls.Spray.Paint2.triggered)
+        else
         {
-            SetType(2);
-        }
-        else if(_sprayControls.Spray.Paint3.triggered)
-        {
-            SetType(3);
-        }
-        else if(_sprayControls.Spray.Paint4.triggered)
-        {
-            SetType(4);
-        }
+            _playerInputReciever.ButtonNorth = false;
+            _playerInputReciever.ButtonWest = false;
+            _playerInputReciever.ButtonSouth = false;
+            _playerInputReciever.ButtonEast = false;
         }
     }
 
-    private void OnTriggerEnter2D(Collider2D other) 
+    private void OnTriggerEnter2D(Collider2D other)
     {
-        if(other.tag == "Conveyor")
+        if (other.tag == "Conveyor")
         {
             conveyors.Add(other.gameObject);
             conveyorDir = conveyors[0].GetComponent<Conveyor>().direction;
@@ -82,13 +110,13 @@ public class Square : MonoBehaviour
         }
     }
 
-    private void OnTriggerExit2D(Collider2D other) 
+    private void OnTriggerExit2D(Collider2D other)
     {
-        if(other.tag == "Conveyor")
+        if (other.tag == "Conveyor")
         {
             conveyors.Remove(other.gameObject);
 
-            if(conveyors.Count <= 0)
+            if (conveyors.Count <= 0)
             {
                 onConveyor = false;
             }
@@ -105,9 +133,14 @@ public class Square : MonoBehaviour
         _inFrontOfSpray = false;
     }
 
+    private void leaveBuilder()
+    {
+        _inFrontOfBuilder = false;
+    }
+
     public void InFrontOfSpray()
     {
-        if(!noMoreSparay)
+        if (!noMoreSparay)
         {
             noMoreSparay = true;
             _inFrontOfSpray = true;
@@ -115,9 +148,19 @@ public class Square : MonoBehaviour
         }
     }
 
+    public void InFrontOfBuilder()
+    {
+        if (!noMoreBuilder)
+        {
+            noMoreBuilder = true;
+            _inFrontOfBuilder = true;
+            Invoke("leaveBuilder", 1);
+        }
+    }
+
     public void SetType(int type)
     {
-        if(type != 0 && !typeSet)
+        if (type != 0 && !typeSet)
         {
             typeSet = true;
             _type = type;
