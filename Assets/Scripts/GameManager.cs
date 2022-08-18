@@ -4,13 +4,8 @@ using UnityEngine;
 
 public class GameManager : MonoBehaviour
 {
-    void Start()
+    public void GameOver()
     {
-        
-    }
-
-    void Update()
-    {
-        
+        print("GAME OVER");
     }
 }

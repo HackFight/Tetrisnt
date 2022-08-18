@@ -1,6 +1,3 @@
-using System;
-using System.Collections;
-using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 using UnityEngine.InputSystem;
@@ -10,7 +7,7 @@ using UnityEngine.SceneManagement;
 public class PlayerInputSender : MonoBehaviour
 {
     private PlayerInput _playerInput;
-    private List<PlayerInputReciever> _squareRecievers = new List<PlayerInputReciever>();
+    private PlayerInputReciever _playerInputReciever;
 
     private void Awake()
     {
@@ -26,6 +23,7 @@ public class PlayerInputSender : MonoBehaviour
     private void LoadInputReciever()
     {
         PlayerInputReciever[] recievers = FindObjectsOfType<PlayerInputReciever>();
+        _playerInputReciever = recievers.FirstOrDefault(i => i.PlayerIndex == _playerInput.playerIndex);
 
         if (recievers.Length <= 0)
         {
@@ -33,43 +31,28 @@ public class PlayerInputSender : MonoBehaviour
         }
     }
 
-    public void OnButtonEast()
+    public void OnButtonEast(InputValue value)
     {
-        foreach (PlayerInputReciever reciever in _squareRecievers)
-        {
-            reciever.ButtonEast = true;
-        }
+        _playerInputReciever.ButtonEast = value.Get<float>() == 1;
     }
 
-    public void OnButtonSouth()
+    public void OnButtonSouth(InputValue value)
     {
-        foreach (PlayerInputReciever reciever in _squareRecievers)
-        {
-            reciever.ButtonSouth = true;
-        }
+        _playerInputReciever.ButtonSouth = value.Get<float>() == 1;
     }
 
-    public void OnButtonWest()
+    public void OnButtonWest(InputValue value)
     {
-        foreach (PlayerInputReciever reciever in _squareRecievers)
-        {
-            reciever.ButtonWest = true;
-        }
+        _playerInputReciever.ButtonWest = value.Get<float>() == 1;
     }
 
-    public void OnButtonNorth()
+    public void OnButtonNorth(InputValue value)
     {
-        foreach (PlayerInputReciever reciever in _squareRecievers)
-        {
-            reciever.ButtonNorth = true;
-        }
+        _playerInputReciever.ButtonNorth = value.Get<float>() == 1;
     }
 
-    public void AddSquareToList(PlayerInputReciever reciever)
+    private void OnLeftJoystick(InputValue value)
     {
-        if (reciever.gameObject.tag == "Square")
-        {
-            _squareRecievers.Add(reciever);
-        }
+        _playerInputReciever.Joystick = value.Get<Vector2>();
     }
 }

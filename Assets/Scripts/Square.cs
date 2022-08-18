@@ -6,7 +6,8 @@ using UnityEngine;
 [RequireComponent(typeof(Collider2D), typeof(SpriteRenderer))]
 public class Square : MonoBehaviour
 {
-    private const int PLAYER_INDEX = 0;
+    private const int PLAYER_INDEX1 = 0;
+    private const int PLAYER_INDEX2 = 1;
 
     private bool onConveyor = false;
     private bool _inFrontOfSpray = false;
@@ -14,12 +15,16 @@ public class Square : MonoBehaviour
     private bool noMoreSparay = false;
     private bool noMoreBuilder = false;
     public SquareData squareData;
-    // private SprayControls _sprayControls;
+
+    private BuildGrid _buildGrid;
 
     private SpriteRenderer _spriteRenderer;
 
-    private int _type;
+    public int _type;
     private bool typeSet;
+    public int _randomNumber;
+
+    private ColorSignal _colorSignal;
 
     private Vector3 conveyorDir;
 
@@ -27,34 +32,27 @@ public class Square : MonoBehaviour
 
     private Collider2D squareCollider;
 
-    private PlayerInputReciever _playerInputReciever;
+    private PlayerInputReciever _playerInputReciever1;
+    private PlayerInputReciever _playerInputReciever2;
 
     private void Awake()
     {
-        // _sprayControls = new SprayControls();
+        squareCollider = GetComponent<Collider2D>();
+        _spriteRenderer = GetComponent<SpriteRenderer>();
+        _buildGrid = FindObjectOfType<BuildGrid>();
+        _colorSignal = FindObjectOfType<ColorSignal>();
 
         PlayerInputReciever[] recievers = FindObjectsOfType<PlayerInputReciever>();
-
-        _playerInputReciever = recievers.FirstOrDefault(i => i.PlayerIndex == PLAYER_INDEX);
-    }
-
-    private void OnEnable()
-    {
-        // _sprayControls.Enable();
-    }
-
-    private void OnDisable()
-    {
-        // _sprayControls.Disable();
+        _playerInputReciever1 = recievers.First(i => i.PlayerIndex == PLAYER_INDEX1);
+        _playerInputReciever2 = recievers.First(i => i.PlayerIndex == PLAYER_INDEX2);
     }
 
     void Start()
     {
-        squareCollider = GetComponent<Collider2D>();
-
-        _spriteRenderer = GetComponent<SpriteRenderer>();
-
         _spriteRenderer.sprite = squareData.GetBaseSprite();
+
+        _randomNumber = Random.Range(1, 5);
+        _colorSignal.SetColor(_randomNumber - 1);
     }
 
     void Update()
@@ -66,37 +64,30 @@ public class Square : MonoBehaviour
 
         if (_inFrontOfSpray)
         {
-            if (_playerInputReciever.ButtonEast)
+            if (_playerInputReciever1.ButtonEast)
             {
-                _playerInputReciever.ButtonEast = false;
-
                 SetType(1);
             }
-            else if (_playerInputReciever.ButtonSouth)
+            else if (_playerInputReciever1.ButtonSouth)
             {
-                _playerInputReciever.ButtonSouth = false;
-
                 SetType(2);
             }
-            else if (_playerInputReciever.ButtonWest)
+            else if (_playerInputReciever1.ButtonWest)
             {
-                _playerInputReciever.ButtonWest = false;
-
                 SetType(3);
             }
-            else if (_playerInputReciever.ButtonNorth)
+            else if (_playerInputReciever1.ButtonNorth)
             {
-                _playerInputReciever.ButtonNorth = false;
-
                 SetType(4);
             }
         }
-        else
+
+        if (_inFrontOfBuilder)
         {
-            _playerInputReciever.ButtonNorth = false;
-            _playerInputReciever.ButtonWest = false;
-            _playerInputReciever.ButtonSouth = false;
-            _playerInputReciever.ButtonEast = false;
+            if (_playerInputReciever2.ButtonEast)
+            {
+                GoInBuilder();
+            }
         }
     }
 
@@ -165,6 +156,14 @@ public class Square : MonoBehaviour
             typeSet = true;
             _type = type;
             _spriteRenderer.sprite = squareData.GetSprite(type - 1);
+        }
+    }
+
+    private void GoInBuilder()
+    {
+        if (_type != 0)
+        {
+            Destroy(gameObject);
         }
     }
 }

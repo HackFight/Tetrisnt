@@ -13,7 +13,6 @@ GameObject:
   - component: {fileID: 2594209253830916613}
   - component: {fileID: 683963629735669530}
   - component: {fileID: 168142638220198347}
-  - component: {fileID: 5383642424027560020}
   m_Layer: 6
   m_Name: White Square
   m_TagString: Square
@@ -148,15 +147,3 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   squareData: {fileID: 11400000, guid: 5442c449d0201434e87e34cb4280a29f, type: 2}
---- !u!114 &5383642424027560020
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1216187599200298662}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 50c39005fa992ac4b8b8a64d066352ff, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 

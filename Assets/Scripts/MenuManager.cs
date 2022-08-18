@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class MenuManager : MonoBehaviour
@@ -9,7 +7,7 @@ public class MenuManager : MonoBehaviour
     [SerializeField] private GameObject[] optionsTurn = new GameObject[2];
     private bool canTurn = true;
 
-    private void Start() 
+    private void Start()
     {
         canTurn = true;
     }
@@ -21,7 +19,7 @@ public class MenuManager : MonoBehaviour
             canTurn = false;
             foreach (GameObject conv in playTurn)
             {
-                if(conv.active == true)
+                if (conv.activeSelf)
                 {
                     conv.SetActive(false);
                 }
@@ -31,12 +29,12 @@ public class MenuManager : MonoBehaviour
                 }
             }
         }
-        else if(type == 2 && canTurn)
+        else if (type == 2 && canTurn)
         {
             canTurn = false;
             foreach (GameObject conv in optionsTurn)
             {
-                if(conv.active == true)
+                if (conv.activeSelf)
                 {
                     conv.SetActive(false);
                 }
