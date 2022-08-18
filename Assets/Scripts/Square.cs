@@ -16,6 +16,8 @@ public class Square : MonoBehaviour
     private bool noMoreBuilder = false;
     public SquareData squareData;
 
+    public bool isDying;
+
     private BuildGrid _buildGrid;
 
     private SpriteRenderer _spriteRenderer;
@@ -33,7 +35,7 @@ public class Square : MonoBehaviour
     private Collider2D squareCollider;
 
     private PlayerInputReciever _playerInputReciever1;
-    private PlayerInputReciever _playerInputReciever2;
+    public PlayerInputReciever _playerInputReciever2;
 
     private void Awake()
     {
@@ -81,13 +83,13 @@ public class Square : MonoBehaviour
                 SetType(4);
             }
         }
+    }
 
-        if (_inFrontOfBuilder)
+    private void LateUpdate()
+    {
+        if (isDying)
         {
-            if (_playerInputReciever2.ButtonEast)
-            {
-                GoInBuilder();
-            }
+            Destroy(this.gameObject);
         }
     }
 
@@ -156,14 +158,6 @@ public class Square : MonoBehaviour
             typeSet = true;
             _type = type;
             _spriteRenderer.sprite = squareData.GetSprite(type - 1);
-        }
-    }
-
-    private void GoInBuilder()
-    {
-        if (_type != 0)
-        {
-            Destroy(gameObject);
         }
     }
 }

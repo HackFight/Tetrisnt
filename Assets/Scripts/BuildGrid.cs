@@ -9,6 +9,8 @@ public class BuildGrid : MonoBehaviour
 
     public GameObject _buildGridCell;
 
+    public GameObject _gridSquare;
+
     [SerializeField][Range(1, 5)] private int _buildGridResolution;
     [SerializeField][Range(0, 0.1f)] private float builderOffset;
 
@@ -34,9 +36,14 @@ public class BuildGrid : MonoBehaviour
 
             if (square.transform.position.x >= builderCollider.bounds.center.x - builderOffset && square.gameObject.transform.position.x <= builderCollider.bounds.center.x + builderOffset)
             {
-                if (squareScript._type != 0)
+                if (squareScript._type != 0 && squareScript._playerInputReciever2.ButtonEast)
                 {
+                    GameObject _object = Instantiate(_gridSquare, transform.position, Quaternion.identity);
 
+                    _object.GetComponent<BuildSquare>().SetType(squareScript._type);
+                    print(squareScript._type);
+
+                    squareScript.isDying = true;
                 }
 
                 squareScript.InFrontOfBuilder();
