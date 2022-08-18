@@ -1,20 +1,30 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
+[RequireComponent(typeof(Collider2D), typeof(SpriteRenderer))]
 public class Square : MonoBehaviour
 {
+    private const int PLAYER_INDEX1 = 0;
+    private const int PLAYER_INDEX2 = 1;
 
     private bool onConveyor = false;
     private bool _inFrontOfSpray = false;
+    private bool _inFrontOfBuilder = false;
     private bool noMoreSparay = false;
+    private bool noMoreBuilder = false;
     public SquareData squareData;
-    private SprayControls _sprayControls;
+
+    private BuildGrid _buildGrid;
 
     private SpriteRenderer _spriteRenderer;
 
-    private int _type;
+    public int _type;
     private bool typeSet;
+    public int _randomNumber;
+
+    private ColorSignal _colorSignal;
 
     private Vector3 conveyorDir;
 
@@ -22,59 +32,68 @@ public class Square : MonoBehaviour
 
     private Collider2D squareCollider;
 
-    private void Awake() 
-    {
-        _sprayControls = new SprayControls();
-    }
+    private PlayerInputReciever _playerInputReciever1;
+    private PlayerInputReciever _playerInputReciever2;
 
-    private void OnEnable() 
+    private void Awake()
     {
-        _sprayControls.Enable();
-    }
+        squareCollider = GetComponent<Collider2D>();
+        _spriteRenderer = GetComponent<SpriteRenderer>();
+        _buildGrid = FindObjectOfType<BuildGrid>();
+        _colorSignal = FindObjectOfType<ColorSignal>();
 
-    private void OnDisable() 
-    {
-        _sprayControls.Disable();
+        PlayerInputReciever[] recievers = FindObjectsOfType<PlayerInputReciever>();
+        _playerInputReciever1 = recievers.First(i => i.PlayerIndex == PLAYER_INDEX1);
+        _playerInputReciever2 = recievers.First(i => i.PlayerIndex == PLAYER_INDEX2);
     }
 
     void Start()
     {
-        squareCollider = GetComponent<Collider2D>();
+        _spriteRenderer.sprite = squareData.GetBaseSprite();
 
-        _spriteRenderer = GetComponent<SpriteRenderer>();
+        _randomNumber = Random.Range(1, 5);
+        _colorSignal.SetColor(_randomNumber - 1);
     }
 
     void Update()
     {
-        if(onConveyor && !_inFrontOfSpray)
+        if (onConveyor && !_inFrontOfSpray && !_inFrontOfBuilder)
         {
             transform.Translate(conveyorDir * squareData.GetSpeed() * Time.deltaTime);
         }
 
-        if(_inFrontOfSpray)
+        if (_inFrontOfSpray)
         {
-            if(_sprayControls.Spray.Paint1.triggered)
-        {
-            SetType(1);
+            if (_playerInputReciever1.ButtonEast)
+            {
+                SetType(1);
+            }
+            else if (_playerInputReciever1.ButtonSouth)
+            {
+                SetType(2);
+            }
+            else if (_playerInputReciever1.ButtonWest)
+            {
+                SetType(3);
+            }
+            else if (_playerInputReciever1.ButtonNorth)
+            {
+                SetType(4);
+            }
         }
-        else if(_sprayControls.Spray.Paint2.triggered)
+
+        if (_inFrontOfBuilder)
         {
-            SetType(2);
-        }
-        else if(_sprayControls.Spray.Paint3.triggered)
-        {
-            SetType(3);
-        }
-        else if(_sprayControls.Spray.Paint4.triggered)
-        {
-            SetType(4);
-        }
+            if (_playerInputReciever2.ButtonEast)
+            {
+                GoInBuilder();
+            }
         }
     }
 
-    private void OnTriggerEnter2D(Collider2D other) 
+    private void OnTriggerEnter2D(Collider2D other)
     {
-        if(other.tag == "Conveyor")
+        if (other.tag == "Conveyor")
         {
             conveyors.Add(other.gameObject);
             conveyorDir = conveyors[0].GetComponent<Conveyor>().direction;
@@ -82,13 +101,13 @@ public class Square : MonoBehaviour
         }
     }
 
-    private void OnTriggerExit2D(Collider2D other) 
+    private void OnTriggerExit2D(Collider2D other)
     {
-        if(other.tag == "Conveyor")
+        if (other.tag == "Conveyor")
         {
             conveyors.Remove(other.gameObject);
 
-            if(conveyors.Count <= 0)
+            if (conveyors.Count <= 0)
             {
                 onConveyor = false;
             }
@@ -105,9 +124,14 @@ public class Square : MonoBehaviour
         _inFrontOfSpray = false;
     }
 
+    private void leaveBuilder()
+    {
+        _inFrontOfBuilder = false;
+    }
+
     public void InFrontOfSpray()
     {
-        if(!noMoreSparay)
+        if (!noMoreSparay)
         {
             noMoreSparay = true;
             _inFrontOfSpray = true;
@@ -115,13 +139,31 @@ public class Square : MonoBehaviour
         }
     }
 
+    public void InFrontOfBuilder()
+    {
+        if (!noMoreBuilder)
+        {
+            noMoreBuilder = true;
+            _inFrontOfBuilder = true;
+            Invoke("leaveBuilder", 1);
+        }
+    }
+
     public void SetType(int type)
     {
-        if(type != 0 && !typeSet)
+        if (type != 0 && !typeSet)
         {
             typeSet = true;
             _type = type;
-            _spriteRenderer.color = squareData.GetColor(type - 1);
+            _spriteRenderer.sprite = squareData.GetSprite(type - 1);
+        }
+    }
+
+    private void GoInBuilder()
+    {
+        if (_type != 0)
+        {
+            Destroy(gameObject);
         }
     }
 }

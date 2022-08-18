@@ -8,7 +8,7 @@ public class Spray : MonoBehaviour
 
     private List<GameObject> squaresInFrontOfSpray = new List<GameObject>();
 
-    [Range(0,4)]public int sprayColor;
+    [Range(0, 4)] public int sprayColor;
 
     void Update()
     {
@@ -16,24 +16,24 @@ public class Spray : MonoBehaviour
         {
             Square squareScript = square.GetComponent<Square>();
 
-            if(square.transform.position.y >= transform.position.y - sprayOffset && square.gameObject.transform.position.y <= transform.position.y + sprayOffset)
+            if (square.transform.position.y >= transform.position.y - sprayOffset && square.gameObject.transform.position.y <= transform.position.y + sprayOffset)
             {
                 squareScript.InFrontOfSpray();
             }
         }
     }
 
-    private void OnTriggerEnter2D(Collider2D other) 
+    private void OnTriggerEnter2D(Collider2D other)
     {
-        if(other.gameObject.tag == "Square")
+        if (other.gameObject.tag == "Square")
         {
             squaresInFrontOfSpray.Add(other.gameObject);
         }
     }
 
-    private void OnTriggerExit2D(Collider2D other) 
+    private void OnTriggerExit2D(Collider2D other)
     {
-        if(other.gameObject.tag == "Square")
+        if (other.gameObject.tag == "Square")
         {
             squaresInFrontOfSpray.Remove(other.gameObject);
         }
