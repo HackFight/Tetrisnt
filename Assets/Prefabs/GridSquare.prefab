@@ -151,7 +151,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _threshold: 0.7
-  _speed: 2
+  _speed: 0.5
   _points:
   - {fileID: 8238624356344236584}
   - {fileID: 8238624356519427544}

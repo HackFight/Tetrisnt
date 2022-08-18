@@ -9,6 +9,8 @@ public class BuildSquare : MonoBehaviour
     private const int PLAYER_INDEX1 = 0;
     private const int PLAYER_INDEX2 = 1;
 
+    public bool _isSelected = true;
+
     [SerializeField][Range(0, 1)] private float _threshold;
 
     [SerializeField][Range(0, 5)] private float _speed;
@@ -45,28 +47,29 @@ public class BuildSquare : MonoBehaviour
     {
         if (_playerInputReciever2.Joystick.magnitude > _threshold)
         {
+            Transform nearestPoint = _points[0];
 
             foreach (Transform point in _points)
             {
-                Transform nearestPoint = _points[0];
-
-                if (Vector2.Distance(_playerInputReciever2.Joystick, point.position) < Vector2.Distance(_playerInputReciever2.Joystick, nearestPoint.position))
+                if (Vector2.Distance(_playerInputReciever2.Joystick, point.position - transform.position) < Vector2.Distance(_playerInputReciever2.Joystick, nearestPoint.position - transform.position))
                 {
                     nearestPoint = point;
                 }
-
-                dirTransform = nearestPoint;
-                //print(nearestPoint);
-                //print(Vector2.Distance(_playerInputReciever2.Joystick, point.position));
-                print(Vector2.Distance(_points[0].position, _points[1].position));
             }
+
+            dirTransform = nearestPoint;
+        }
+        else
+        {
+            dirTransform = null;
         }
 
-        if (Physics2D.OverlapPoint(dirTransform.position, 7) && _canMove)
+
+        if (dirTransform != null && Physics2D.OverlapPoint(dirTransform.position, ~7) && _canMove && _isSelected)
         {
             _canMove = false;
 
-            transform.position = Physics2D.OverlapPoint(dirTransform.position, 7).transform.position;
+            transform.position = dirTransform.position;
 
             Invoke("CanMoveAgain", _speed);
         }
