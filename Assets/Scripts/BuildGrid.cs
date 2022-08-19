@@ -91,11 +91,15 @@ public class BuildGrid : MonoBehaviour
         {
             foreach (GameObject square in _builtSquares)
             {
-                if (square.GetComponent<BuildSquare>()._isFalling == false)
+                if (square.GetComponent<BuildSquare>()._isBuilt == false)
                 {
-                    square.transform.position = square.transform.position + _offset;
+                    BuildSquare _squareScript = square.GetComponent<BuildSquare>();
 
-                    square.GetComponent<BuildSquare>()._isFalling = true;
+                    _squareScript._clawOffset = square.transform.position - transform.position;
+
+                    _squareScript._otherSquaresOfShape.AddRange(_builtSquares);
+
+                    _squareScript._isBuilt = true;
                 }
             }
 

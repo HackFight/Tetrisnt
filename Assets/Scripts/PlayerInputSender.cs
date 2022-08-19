@@ -51,6 +51,11 @@ public class PlayerInputSender : MonoBehaviour
         _playerInputReciever.ButtonNorth = value.Get<float>() == 1;
     }
 
+    private void OnLeftJoystickButton(InputValue value)
+    {
+        _playerInputReciever.LeftJoystickButton = value.Get<float>() == 1;
+    }
+
     private void OnLeftJoystick(InputValue value)
     {
         _playerInputReciever.Joystick = value.Get<Vector2>();
@@ -62,5 +67,6 @@ public class PlayerInputSender : MonoBehaviour
         _playerInputReciever.ButtonSouth = false;
         _playerInputReciever.ButtonWest = false;
         _playerInputReciever.ButtonNorth = false;
+        _playerInputReciever.LeftJoystickButton = false;
     }
 }

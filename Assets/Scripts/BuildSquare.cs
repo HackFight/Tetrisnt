@@ -4,7 +4,7 @@ using System.Linq;
 using UnityEngine;
 
 
-[RequireComponent(typeof(Rigidbody2D))]
+[RequireComponent(typeof(Rigidbody2D), typeof(Collider2D))]
 public class BuildSquare : MonoBehaviour
 {
     private const int PLAYER_INDEX1 = 0;
@@ -23,7 +23,7 @@ public class BuildSquare : MonoBehaviour
 
     private Transform dirTransform;
 
-    public bool _isFalling;
+    public bool _isBuilt;
 
     private int _type;
     private bool typeSet;
@@ -38,6 +38,19 @@ public class BuildSquare : MonoBehaviour
     private PlayerInputReciever _playerInputReciever1;
     private PlayerInputReciever _playerInputReciever2;
 
+    [HideInInspector]
+    public Vector3 _clawOffset;
+
+    private GameObject _claw;
+    private bool _isFalling;
+    private bool _isInClaw;
+
+    private Collider2D _collider;
+
+    private TetrisntGrid tetrisntGrid;
+
+    public List<GameObject> _otherSquaresOfShape = new List<GameObject>();
+
     private void Awake()
     {
         PlayerInputReciever[] recievers = FindObjectsOfType<PlayerInputReciever>();
@@ -45,11 +58,15 @@ public class BuildSquare : MonoBehaviour
         _playerInputReciever2 = recievers.First(i => i.PlayerIndex == PLAYER_INDEX2);
 
         _rb = GetComponent<Rigidbody2D>();
+        _claw = FindObjectOfType<Claw>().transform.GetChild(0).gameObject;
+        _collider = GetComponent<Collider2D>();
+        tetrisntGrid = FindObjectOfType<TetrisntGrid>();
     }
 
     private void Start()
     {
         _canMove = true;
+        _isInClaw = true;
 
         _rb.gravityScale = 0;
 
@@ -104,9 +121,32 @@ public class BuildSquare : MonoBehaviour
             Invoke("CanMoveAgain", _speed);
         }
 
+        if (_isBuilt && !_isFalling && _isInClaw)
+        {
+            transform.position = _claw.transform.position + _clawOffset;
+
+            if (_playerInputReciever1.LeftJoystickButton)
+            {
+                _isFalling = true;
+
+                _collider.isTrigger = false;
+            }
+        }
+
         if (_isFalling)
         {
             _rb.gravityScale = 1;
+            _isInClaw = false;
+        }
+        else
+        {
+            _rb.gravityScale = 0;
+            _rb.velocity = Vector2.zero;
+        }
+
+        if (!_isFalling && !_isInClaw && !_isSelected)
+        {
+            transform.position = tetrisntGrid.GetNearestPoint(transform.position);
         }
     }
 
@@ -123,5 +163,16 @@ public class BuildSquare : MonoBehaviour
     private void CanMoveAgain()
     {
         _canMove = true;
+    }
+
+    private void OnCollisionEnter2D(Collision2D other)
+    {
+        if (!_otherSquaresOfShape.Contains(other.gameObject))
+        {
+            foreach (GameObject square in _otherSquaresOfShape)
+            {
+                square.GetComponent<BuildSquare>()._isFalling = false;
+            }
+        }
     }
 }
