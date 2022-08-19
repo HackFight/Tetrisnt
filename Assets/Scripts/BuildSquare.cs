@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
+
+[RequireComponent(typeof(Rigidbody2D))]
 public class BuildSquare : MonoBehaviour
 {
     private const int PLAYER_INDEX1 = 0;
@@ -31,6 +33,8 @@ public class BuildSquare : MonoBehaviour
 
     private bool _canMove;
 
+    private Rigidbody2D _rb;
+
     private PlayerInputReciever _playerInputReciever1;
     private PlayerInputReciever _playerInputReciever2;
 
@@ -39,11 +43,15 @@ public class BuildSquare : MonoBehaviour
         PlayerInputReciever[] recievers = FindObjectsOfType<PlayerInputReciever>();
         _playerInputReciever1 = recievers.First(i => i.PlayerIndex == PLAYER_INDEX1);
         _playerInputReciever2 = recievers.First(i => i.PlayerIndex == PLAYER_INDEX2);
+
+        _rb = GetComponent<Rigidbody2D>();
     }
 
     private void Start()
     {
         _canMove = true;
+
+        _rb.gravityScale = 0;
 
         _spriteRenderer.gameObject.transform.localScale = new Vector3(0.7f, 0.7f, 1);
         _spriteRenderer.sortingOrder = 5;
@@ -63,7 +71,7 @@ public class BuildSquare : MonoBehaviour
             gameObject.layer = LayerMask.NameToLayer("GridSquare");
         }
 
-        if (_playerInputReciever2.Joystick.magnitude > _threshold)
+        if (_playerInputReciever2.Joystick.magnitude > _threshold && _isSelected)
         {
             Transform nearestPoint = _points[0];
 
@@ -94,6 +102,11 @@ public class BuildSquare : MonoBehaviour
             transform.position = dirTransform.position;
 
             Invoke("CanMoveAgain", _speed);
+        }
+
+        if (_isFalling)
+        {
+            _rb.gravityScale = 1;
         }
     }
 

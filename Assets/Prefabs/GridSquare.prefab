@@ -169,7 +169,7 @@ Rigidbody2D:
   m_Interpolate: 0
   m_SleepingMode: 1
   m_CollisionDetection: 0
-  m_Constraints: 0
+  m_Constraints: 5
 --- !u!114 &8238624356073793429
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -196,6 +196,7 @@ MonoBehaviour:
   _gridSquareLM:
     serializedVersion: 2
     m_Bits: 256
+  _isFalling: 0
   _spriteRenderer: {fileID: 6924439740093050281}
   _squareData: {fileID: 11400000, guid: 5442c449d0201434e87e34cb4280a29f, type: 2}
 --- !u!1 &8238624356138805555
