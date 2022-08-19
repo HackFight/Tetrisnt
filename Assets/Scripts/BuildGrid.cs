@@ -59,6 +59,8 @@ public class BuildGrid : MonoBehaviour
 
             _object.GetComponent<BuildSquare>()._isSelected = false;
 
+            FindObjectOfType<AudioManager>().Play("Assemble2");
+
             _builtSquares.Add(_object);
 
             _changedOnThisFrame = true;

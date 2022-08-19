@@ -49,6 +49,8 @@ public class BuildSquare : MonoBehaviour
         _spriteRenderer.sortingOrder = 5;
 
         gameObject.layer = LayerMask.NameToLayer("Default");
+
+        FindObjectOfType<AudioManager>().Play("Assemble1");
     }
 
     private void Update()

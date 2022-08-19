@@ -628,6 +628,7 @@ GameObject:
   - component: {fileID: 313111112}
   - component: {fileID: 313111113}
   - component: {fileID: 313111114}
+  - component: {fileID: 313111115}
   m_Layer: 0
   m_Name: GameManager
   m_TagString: Untagged
@@ -724,6 +725,31 @@ MonoBehaviour:
   _life: 0
   _actualScoreText: {fileID: 278363332}
   _actualLifeText: {fileID: 1040740137}
+--- !u!114 &313111115
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 313111110}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3a5444e498e0e04428fc58e47d5c4d8e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _sounds:
+  - name: Assemble1
+    clip: {fileID: 8300000, guid: 5716eb943d4d1b54c801af28ff873aec, type: 3}
+    volume: 0.5
+    pitch: 1
+    loop: 0
+    source: {fileID: 0}
+  - name: Assemble2
+    clip: {fileID: 8300000, guid: 25709409e6b4e4945948eda3abf99500, type: 3}
+    volume: 0.5
+    pitch: 1
+    loop: 0
+    source: {fileID: 0}
 --- !u!1 &472826179
 GameObject:
   m_ObjectHideFlags: 0
