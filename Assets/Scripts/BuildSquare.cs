@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
-[RequireComponent(typeof(SpriteRenderer))]
 public class BuildSquare : MonoBehaviour
 {
     private const int PLAYER_INDEX1 = 0;
@@ -16,11 +15,17 @@ public class BuildSquare : MonoBehaviour
     [SerializeField][Range(0, 5)] private float _speed;
 
     [SerializeField] private Transform[] _points = new Transform[4];
+
+    [SerializeField] private LayerMask _buildGridCellLM;
+    public LayerMask _gridSquareLM;
+
     private Transform dirTransform;
+
+    public bool _isFalling;
 
     private int _type;
     private bool typeSet;
-    private SpriteRenderer _spriteRenderer;
+    public SpriteRenderer _spriteRenderer;
 
     public SquareData _squareData;
 
@@ -34,17 +39,28 @@ public class BuildSquare : MonoBehaviour
         PlayerInputReciever[] recievers = FindObjectsOfType<PlayerInputReciever>();
         _playerInputReciever1 = recievers.First(i => i.PlayerIndex == PLAYER_INDEX1);
         _playerInputReciever2 = recievers.First(i => i.PlayerIndex == PLAYER_INDEX2);
-
-        _spriteRenderer = GetComponent<SpriteRenderer>();
     }
 
     private void Start()
     {
         _canMove = true;
+
+        _spriteRenderer.gameObject.transform.localScale = new Vector3(0.7f, 0.7f, 1);
+        _spriteRenderer.sortingOrder = 5;
+
+        gameObject.layer = LayerMask.NameToLayer("Default");
     }
 
     private void Update()
     {
+        if (!_isSelected)
+        {
+            _spriteRenderer.gameObject.transform.localScale = new Vector3(1, 1, 1);
+            _spriteRenderer.sortingOrder = 3;
+
+            gameObject.layer = LayerMask.NameToLayer("GridSquare");
+        }
+
         if (_playerInputReciever2.Joystick.magnitude > _threshold)
         {
             Transform nearestPoint = _points[0];
@@ -64,8 +80,12 @@ public class BuildSquare : MonoBehaviour
             dirTransform = null;
         }
 
+        if (_playerInputReciever2.Joystick.magnitude < 0.1f)
+        {
+            _canMove = true;
+        }
 
-        if (dirTransform != null && Physics2D.OverlapPoint(dirTransform.position, ~7) && _canMove && _isSelected)
+        if (dirTransform != null && Physics2D.OverlapPoint(dirTransform.position, _buildGridCellLM) && _canMove && _isSelected)
         {
             _canMove = false;
 

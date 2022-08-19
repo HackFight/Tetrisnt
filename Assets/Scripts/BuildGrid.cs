@@ -14,6 +14,8 @@ public class BuildGrid : MonoBehaviour
 
     public GameObject _gridSquare;
 
+    public Vector3 _offset;
+
     [SerializeField][Range(1, 5)] private int _buildGridResolution;
     [SerializeField][Range(0, 0.1f)] private float builderOffset;
 
@@ -23,9 +25,13 @@ public class BuildGrid : MonoBehaviour
 
     private PlayerInputReciever _playerInputReciever2;
 
+    private List<GameObject> _builtSquares = new List<GameObject>();
+
     private bool _hasASquare;
 
     private GameObject _object;
+
+    private bool _changedOnThisFrame;
 
     private void Awake()
     {
@@ -42,13 +48,29 @@ public class BuildGrid : MonoBehaviour
 
     private void Update()
     {
+        if (_changedOnThisFrame)
+        {
+            _changedOnThisFrame = false;
+        }
+
+        if (_playerInputReciever2.ButtonEast && _hasASquare && !Physics2D.OverlapPoint(_object.transform.position, _object.GetComponent<BuildSquare>()._gridSquareLM))
+        {
+            _hasASquare = false;
+
+            _object.GetComponent<BuildSquare>()._isSelected = false;
+
+            _builtSquares.Add(_object);
+
+            _changedOnThisFrame = true;
+        }
+
         foreach (GameObject square in _squaresInFrontOfBuilder)
         {
             Square squareScript = square.GetComponent<Square>();
 
             if (square.transform.position.x >= builderCollider.bounds.center.x - builderOffset && square.gameObject.transform.position.x <= builderCollider.bounds.center.x + builderOffset)
             {
-                if (squareScript._type != 0 && squareScript._playerInputReciever2.ButtonEast && !_hasASquare)
+                if (squareScript._type != 0 && _playerInputReciever2.ButtonEast && !_hasASquare && !_changedOnThisFrame)
                 {
                     _hasASquare = true;
 
@@ -61,6 +83,21 @@ public class BuildGrid : MonoBehaviour
 
                 squareScript.InFrontOfBuilder();
             }
+        }
+
+        if (_builtSquares.Count >= 4)
+        {
+            foreach (GameObject square in _builtSquares)
+            {
+                if (square.GetComponent<BuildSquare>()._isFalling == false)
+                {
+                    square.transform.position = square.transform.position + _offset;
+
+                    square.GetComponent<BuildSquare>()._isFalling = true;
+                }
+            }
+
+            _builtSquares.Clear();
         }
     }
 

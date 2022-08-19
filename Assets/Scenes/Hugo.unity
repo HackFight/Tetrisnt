@@ -973,6 +973,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _buildGridCell: {fileID: 39929557041845782, guid: 572ffa49253863f4dad8ef6475bc6d36, type: 3}
   _gridSquare: {fileID: 8238624356073793424, guid: 8ec8b15fc35e22d4197a229ea0cae739, type: 3}
+  _offset: {x: 10, y: 0, z: 0}
   _buildGridResolution: 3
   builderOffset: 0.01
 --- !u!61 &832167652
@@ -1795,12 +1796,16 @@ PrefabInstance:
       value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 8812313817206389631, guid: 147a2ab7cb8f93d41af1b64c084a8d6e, type: 3}
+      propertyPath: m_LocalScale.y
+      value: 8.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 8812313817206389631, guid: 147a2ab7cb8f93d41af1b64c084a8d6e, type: 3}
       propertyPath: m_LocalPosition.x
       value: -8
       objectReference: {fileID: 0}
     - target: {fileID: 8812313817206389631, guid: 147a2ab7cb8f93d41af1b64c084a8d6e, type: 3}
       propertyPath: m_LocalPosition.y
-      value: -1.4375
+      value: -1.75
       objectReference: {fileID: 0}
     - target: {fileID: 8812313817206389631, guid: 147a2ab7cb8f93d41af1b64c084a8d6e, type: 3}
       propertyPath: m_LocalPosition.z
