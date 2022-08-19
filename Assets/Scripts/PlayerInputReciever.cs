@@ -8,6 +8,7 @@ public class PlayerInputReciever : MonoBehaviour
 
     public Vector2 Joystick { get; set; }
 
+    public bool LeftJoystickButton { get; set; }
     public bool ButtonEast { get; set; }
     public bool ButtonSouth { get; set; }
     public bool ButtonWest { get; set; }

@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 39929557041845781}
   - component: {fileID: 39929557041845780}
   - component: {fileID: 39929557041845771}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: BuildGridCell
   m_TagString: Untagged
   m_Icon: {fileID: 0}

@@ -9,7 +9,7 @@
                     "name": "ButtonEast",
                     "type": "Value",
                     "id": "df16c9bc-eda8-4111-b060-589af5dfc8e3",
-                    "expectedControlType": "Button",
+                    "expectedControlType": "",
                     "processors": "",
                     "interactions": "",
                     "initialStateCheck": true
@@ -46,6 +46,15 @@
                     "type": "Value",
                     "id": "05d88115-39a7-4b83-b50d-a9eb8f6d2638",
                     "expectedControlType": "Vector2",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": true
+                },
+                {
+                    "name": "LeftJoystickButton",
+                    "type": "Value",
+                    "id": "193e160b-46b7-434e-8a04-3128ce6d3366",
+                    "expectedControlType": "",
                     "processors": "",
                     "interactions": "",
                     "initialStateCheck": true
@@ -126,6 +135,17 @@
                     "processors": "",
                     "groups": "Keyboard&Mouse",
                     "action": "ButtonEast",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "1cdd2cbb-ae68-4135-b4c5-42e1d4ccbf36",
+                    "path": "<Gamepad>/leftStickPress",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "Gamepad",
+                    "action": "LeftJoystickButton",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }

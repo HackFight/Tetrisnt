@@ -98,8 +98,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a2bff350fe006294c9a1bddec569d1d9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  sprayOffset: 0.01
-  squaresInFrontOfSpray: []
+  sprayOffset: 0.02
+  sprayColor: 0
 --- !u!61 &8094448645239211382
 BoxCollider2D:
   m_ObjectHideFlags: 0
