@@ -27,13 +27,15 @@ public class TetrisntGrid : MonoBehaviour
             {
                 _pointsArray[x, y] = new GridCell();
                 _pointsArray[x, y].position = new Vector3(transform.position.x + x, transform.position.y + y, 0);
+                _pointsArray[x, y].xCoordinate = x;
+                _pointsArray[x, y].yCoordinate = y;
             }
         }
     }
 
-    public Vector3 GetNearestPoint(Vector3 _point)
+    public GridCell GetNearestCell(Vector3 _point)
     {
-        Vector3 nearestPoint = _pointsArray[0, 0].position;
+        GridCell nearestCell = _pointsArray[0, 0];
 
         float minDistance = Mathf.Infinity;
 
@@ -42,12 +44,32 @@ public class TetrisntGrid : MonoBehaviour
             float distance = Vector3.Distance(_point, point.position);
             if (distance < minDistance)
             {
-                nearestPoint = point.position;
+                nearestCell = point;
                 minDistance = distance;
             }
         }
 
-        return nearestPoint;
+        return nearestCell;
+    }
+
+    public Vector3 GetNearestPoint(Vector3 _point)
+    {
+        return GetNearestCell(_point).position;
+    }
+
+    public List<GridCell> GetAdjacentCells(GridCell cell)
+    {
+        List<GridCell> adjacentCells = new List<GridCell>();
+
+        if (cell.xCoordinate < _gridWidth) adjacentCells.Add(_pointsArray[cell.xCoordinate + 1, cell.yCoordinate]);
+
+        if (cell.yCoordinate > 0) adjacentCells.Add(_pointsArray[cell.xCoordinate, cell.yCoordinate - 1]);
+
+        if (cell.xCoordinate > 0) adjacentCells.Add(_pointsArray[cell.xCoordinate - 1, cell.yCoordinate]);
+
+        if (cell.yCoordinate < _gridHeight) adjacentCells.Add(_pointsArray[cell.xCoordinate, cell.yCoordinate + 1]);
+
+        return adjacentCells;
     }
 
     private void OnDrawGizmos()

@@ -7,6 +7,8 @@ public class AudioManager : MonoBehaviour
 
     public Sound[] _sounds;
 
+    private float rand;
+
     private void Awake()
     {
         foreach (Sound sound in _sounds)
@@ -28,6 +30,13 @@ public class AudioManager : MonoBehaviour
         if (s == null)
         {
             Debug.LogWarning("Sound : " + name + " not found!");
+        }
+
+        if (s.randomPitch)
+        {
+            rand = UnityEngine.Random.Range(s.minRandomPitch, s.maxRandomPitch);
+
+            s.source.pitch = rand;
         }
 
         s.source.Play();

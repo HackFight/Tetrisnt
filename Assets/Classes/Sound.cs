@@ -12,6 +12,10 @@ public class Sound
     [Range(0.1f, 3)] public float pitch = 1f;
 
     public bool loop;
+    public bool randomPitch;
+
+    public float maxRandomPitch;
+    public float minRandomPitch;
 
     [HideInInspector]
     public AudioSource source;

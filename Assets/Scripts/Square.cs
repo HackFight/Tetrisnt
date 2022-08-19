@@ -36,6 +36,7 @@ public class Square : MonoBehaviour
 
     private PlayerInputReciever _playerInputReciever1;
     public PlayerInputReciever _playerInputReciever2;
+    public ParticleSystem[] sprays = new ParticleSystem[4];
 
     private void Awake()
     {
@@ -69,18 +70,22 @@ public class Square : MonoBehaviour
             if (_playerInputReciever1.ButtonEast)
             {
                 SetType(1);
+                FindObjectOfType<AudioManager>().Play("spray");
             }
             else if (_playerInputReciever1.ButtonSouth)
             {
                 SetType(2);
+                FindObjectOfType<AudioManager>().Play("spray");
             }
             else if (_playerInputReciever1.ButtonWest)
             {
                 SetType(3);
+                FindObjectOfType<AudioManager>().Play("spray");
             }
             else if (_playerInputReciever1.ButtonNorth)
             {
                 SetType(4);
+                FindObjectOfType<AudioManager>().Play("spray");
             }
         }
     }

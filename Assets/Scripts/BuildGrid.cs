@@ -7,7 +7,7 @@ using UnityEngine;
 [RequireComponent(typeof(Collider2D))]
 public class BuildGrid : MonoBehaviour
 {
-
+    private const int PLAYER_INDEX1 = 0;
     private const int PLAYER_INDEX2 = 1;
 
     public GameObject _buildGridCell;
@@ -24,6 +24,7 @@ public class BuildGrid : MonoBehaviour
     private Collider2D builderCollider;
 
     private PlayerInputReciever _playerInputReciever2;
+    private PlayerInputReciever _playerInputReciever1;
 
     private List<GameObject> _builtSquares = new List<GameObject>();
 
@@ -33,11 +34,14 @@ public class BuildGrid : MonoBehaviour
 
     private bool _changedOnThisFrame;
 
+    private bool _hasAShape;
+
     private void Awake()
     {
         builderCollider = GetComponent<Collider2D>();
 
         PlayerInputReciever[] recievers = FindObjectsOfType<PlayerInputReciever>();
+        _playerInputReciever1 = recievers.First(i => i.PlayerIndex == PLAYER_INDEX1);
         _playerInputReciever2 = recievers.First(i => i.PlayerIndex == PLAYER_INDEX2);
     }
 
@@ -70,7 +74,7 @@ public class BuildGrid : MonoBehaviour
         {
             Square squareScript = square.GetComponent<Square>();
 
-            if (square.transform.position.x >= builderCollider.bounds.center.x - builderOffset && square.gameObject.transform.position.x <= builderCollider.bounds.center.x + builderOffset)
+            if (square.transform.position.x >= builderCollider.bounds.center.x - builderOffset && square.gameObject.transform.position.x <= builderCollider.bounds.center.x + builderOffset && !_hasAShape)
             {
                 if (squareScript._type != 0 && _playerInputReciever2.ButtonEast && !_hasASquare && !_changedOnThisFrame)
                 {
@@ -87,7 +91,7 @@ public class BuildGrid : MonoBehaviour
             }
         }
 
-        if (_builtSquares.Count >= 4)
+        if (_builtSquares.Count >= 4 && !_hasAShape)
         {
             foreach (GameObject square in _builtSquares)
             {
@@ -103,7 +107,14 @@ public class BuildGrid : MonoBehaviour
                 }
             }
 
+            _hasAShape = true;
+
             _builtSquares.Clear();
+        }
+
+        if (_playerInputReciever1.LeftJoystickButton)
+        {
+            _hasAShape = false;
         }
     }
 

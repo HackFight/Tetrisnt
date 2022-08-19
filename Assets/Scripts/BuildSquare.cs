@@ -49,7 +49,17 @@ public class BuildSquare : MonoBehaviour
 
     private TetrisntGrid tetrisntGrid;
 
+    private bool _needToCheckColor;
+
     public List<GameObject> _otherSquaresOfShape = new List<GameObject>();
+
+    public List<GridCell> _openList = new List<GridCell>();
+    public List<GridCell> _closedList = new List<GridCell>();
+    private List<GridCell> _goodList = new List<GridCell>();
+
+    private ScoreManager _scoreManager;
+
+    public int _minAdjacentSquares;
 
     private void Awake()
     {
@@ -61,6 +71,7 @@ public class BuildSquare : MonoBehaviour
         _claw = FindObjectOfType<Claw>().transform.GetChild(0).gameObject;
         _collider = GetComponent<Collider2D>();
         tetrisntGrid = FindObjectOfType<TetrisntGrid>();
+        _scoreManager = FindObjectOfType<ScoreManager>();
     }
 
     private void Start()
@@ -80,6 +91,13 @@ public class BuildSquare : MonoBehaviour
 
     private void Update()
     {
+        if (_needToCheckColor)
+        {
+            _needToCheckColor = false;
+
+            CheckColors();
+        }
+
         if (!_isSelected)
         {
             _spriteRenderer.gameObject.transform.localScale = new Vector3(1, 1, 1);
@@ -135,6 +153,7 @@ public class BuildSquare : MonoBehaviour
 
         if (_isFalling)
         {
+            GetComponent<BoxCollider2D>().size = new Vector3(0.9f, 0.9f, 1);
             _rb.gravityScale = 1;
             _isInClaw = false;
         }
@@ -146,7 +165,19 @@ public class BuildSquare : MonoBehaviour
 
         if (!_isFalling && !_isInClaw && !_isSelected)
         {
-            transform.position = tetrisntGrid.GetNearestPoint(transform.position);
+            GridCell cell = tetrisntGrid.GetNearestCell(transform.position);
+
+            transform.position = cell.position;
+
+            GetComponent<BoxCollider2D>().size = new Vector3(1, 1, 1);
+
+            cell.objectInCell = gameObject;
+
+            cell.type = _type;
+
+            cell.isOccupied = true;
+
+            _needToCheckColor = true;
         }
     }
 
@@ -174,5 +205,51 @@ public class BuildSquare : MonoBehaviour
                 square.GetComponent<BuildSquare>()._isFalling = false;
             }
         }
+    }
+
+    private void CheckColors()
+    {
+        GridCell cell = tetrisntGrid.GetNearestCell(transform.position);
+
+        _openList.AddRange(tetrisntGrid.GetAdjacentCells(cell));
+        _closedList.Add(cell);
+        _goodList.Add(cell);
+
+        while (_openList.Count > 0)
+        {
+            GridCell _cell = _openList[0];
+            _openList.RemoveAt(0);
+
+            if (_closedList.Contains(_cell)) continue;
+
+            if (_cell.isOccupied && _cell.type == _type)
+            {
+                _openList.AddRange(tetrisntGrid.GetAdjacentCells(_cell));
+
+                if (!_goodList.Contains(_cell))
+                {
+                    _goodList.Add(_cell);
+                }
+
+            }
+            _closedList.Add(_cell);
+        }
+
+        if (_goodList.Count >= _minAdjacentSquares)
+        {
+            foreach (GridCell _cell in _goodList)
+            {
+                _cell.WinAndDestroy(_scoreManager);
+            }
+        }
+
+        _openList.Clear();
+        _closedList.Clear();
+        _goodList.Clear();
+    }
+
+    public void Destroy()
+    {
+        Destroy(gameObject);
     }
 }
