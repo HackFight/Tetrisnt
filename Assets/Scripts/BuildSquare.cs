@@ -42,8 +42,8 @@ public class BuildSquare : MonoBehaviour
     public Vector3 _clawOffset;
 
     private GameObject _claw;
-    private bool _isFalling;
-    private bool _isInClaw;
+    public bool _isFalling;
+    public bool _isInClaw;
 
     private Collider2D _collider;
 
@@ -202,7 +202,10 @@ public class BuildSquare : MonoBehaviour
         {
             foreach (GameObject square in _otherSquaresOfShape)
             {
-                square.GetComponent<BuildSquare>()._isFalling = false;
+                if (square != null)
+                {
+                    square.GetComponent<BuildSquare>()._isFalling = false;
+                }
             }
         }
     }
@@ -210,6 +213,13 @@ public class BuildSquare : MonoBehaviour
     private void CheckColors()
     {
         GridCell cell = tetrisntGrid.GetNearestCell(transform.position);
+
+        if (cell.yCoordinate > 11)
+        {
+            print("Higher than limit!");
+            FindObjectOfType<GameManager>().GameOver();
+            return;
+        }
 
         _openList.AddRange(tetrisntGrid.GetAdjacentCells(cell));
         _closedList.Add(cell);

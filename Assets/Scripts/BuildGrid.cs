@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
-
 [RequireComponent(typeof(Collider2D))]
 public class BuildGrid : MonoBehaviour
 {
@@ -38,11 +37,11 @@ public class BuildGrid : MonoBehaviour
 
     private void Awake()
     {
-        builderCollider = GetComponent<Collider2D>();
-
         PlayerInputReciever[] recievers = FindObjectsOfType<PlayerInputReciever>();
         _playerInputReciever1 = recievers.First(i => i.PlayerIndex == PLAYER_INDEX1);
         _playerInputReciever2 = recievers.First(i => i.PlayerIndex == PLAYER_INDEX2);
+
+        builderCollider = GetComponent<Collider2D>();
     }
 
     private void Start()
@@ -74,7 +73,7 @@ public class BuildGrid : MonoBehaviour
         {
             Square squareScript = square.GetComponent<Square>();
 
-            if (square.transform.position.x >= builderCollider.bounds.center.x - builderOffset && square.gameObject.transform.position.x <= builderCollider.bounds.center.x + builderOffset && !_hasAShape)
+            if (square.transform.position.x >= builderCollider.bounds.center.x - builderOffset && square.gameObject.transform.position.x <= builderCollider.bounds.center.x + builderOffset && _builtSquares.Count < 4)
             {
                 if (squareScript._type != 0 && _playerInputReciever2.ButtonEast && !_hasASquare && !_changedOnThisFrame)
                 {

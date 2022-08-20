@@ -52,6 +52,24 @@ public class TetrisntGrid : MonoBehaviour
         return nearestCell;
     }
 
+    /*public GridCell GetNearestEmptyCell(Vector3 _point)
+    {
+        List<GridCell> _checkedList = new List<GridCell>();
+        GridCell _cell = null;
+
+        while (_cell == null)
+        {
+            if (!GetNearestCell(_point).isOccupied)
+            {
+                _cell = GetNearestCell(_point);
+            }
+            else
+            {
+                _checkedList.Add(GetNearestCell(_point));
+            }
+        }
+    }*/
+
     public Vector3 GetNearestPoint(Vector3 _point)
     {
         return GetNearestCell(_point).position;

@@ -22,7 +22,7 @@ public class GridCell
 
         isOccupied = false;
 
-        objectInCell.GetComponent<BuildSquare>().Destroy();
+        if (objectInCell != null) objectInCell.GetComponent<BuildSquare>().Destroy();
 
     }
 }

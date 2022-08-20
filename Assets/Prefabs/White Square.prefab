@@ -147,3 +147,36 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   squareData: {fileID: 11400000, guid: 5442c449d0201434e87e34cb4280a29f, type: 2}
+  isDying: 0
+  _type: 0
+  _randomNumber: 0
+  _redStockSprites:
+  - {fileID: 21300000, guid: fc15c4a70fdb11748b1fc316da044a50, type: 3}
+  - {fileID: 21300000, guid: c81d61747b98f6e4d89cc9d1afdc72ea, type: 3}
+  - {fileID: 21300000, guid: 85de041d488dedc4db1699cdfd12d1ed, type: 3}
+  - {fileID: 21300000, guid: 67b0f0986ba426d4398c7760cbce6e68, type: 3}
+  - {fileID: 21300000, guid: 69fecc062c1c4e640a5a3e28cd58d93e, type: 3}
+  _greenStockSprites:
+  - {fileID: 21300000, guid: 5f8d26c5dd9ab7f45b4ecda47608d984, type: 3}
+  - {fileID: 21300000, guid: 9d8bfc207021fe24a9cef4b9bc69ddc0, type: 3}
+  - {fileID: 21300000, guid: 1bfc651ebe3a3a3429f073328990e340, type: 3}
+  - {fileID: 21300000, guid: cb8b7288857326d4d9b4a4b328c24963, type: 3}
+  - {fileID: 21300000, guid: d941c3ac2c64355488833a7b3d3db994, type: 3}
+  _blueStockSprites:
+  - {fileID: 21300000, guid: 83414a7062faefe4e869063a1fc6b420, type: 3}
+  - {fileID: 21300000, guid: fff98fbc4cf0eee4799a7213c498225e, type: 3}
+  - {fileID: 21300000, guid: 6bc5c4674b9ae5040a57b63dcad942a8, type: 3}
+  - {fileID: 21300000, guid: 5fedf2ecf2c45894eb50552c3c126b95, type: 3}
+  - {fileID: 21300000, guid: 815acc5ace16987449036dc5d47ff33f, type: 3}
+  _yellowStockSprites:
+  - {fileID: 21300000, guid: 726d8bab1b723fd48a69b819aeb91e96, type: 3}
+  - {fileID: 21300000, guid: 175c4db28584a284689ddcb9c403ba23, type: 3}
+  - {fileID: 21300000, guid: 56a69761473ecbb409a842664a36fa21, type: 3}
+  - {fileID: 21300000, guid: f2a3eaf153018ff42a21919e178d3a28, type: 3}
+  - {fileID: 21300000, guid: 3ae357abc7e18fb44ae90d53467bfaa4, type: 3}
+  _playerInputReciever2: {fileID: 0}
+  sprays:
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}

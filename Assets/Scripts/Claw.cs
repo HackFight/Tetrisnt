@@ -37,6 +37,6 @@ public class Claw : MonoBehaviour
             transform.position = new Vector3(maxX, transform.position.y, 0);
         }
 
-        _followClaw.transform.position = new Vector3(Mathf.RoundToInt(transform.position.x), _followClaw.transform.position.y, 0);
+        _followClaw.transform.position = new Vector3(Mathf.RoundToInt(transform.position.x), _followClaw.transform.position.y, 0) + Vector3.left / 2;
     }
 }

@@ -34,6 +34,20 @@ public class Square : MonoBehaviour
 
     private Collider2D squareCollider;
 
+    private SpriteRenderer _redStockRenderer;
+    public Sprite[] _redStockSprites = new Sprite[5];
+
+    private SpriteRenderer _greenStockRenderer;
+    public Sprite[] _greenStockSprites = new Sprite[5];
+
+    private SpriteRenderer _blueStockRenderer;
+    public Sprite[] _blueStockSprites = new Sprite[5];
+
+    private SpriteRenderer _yellowStockRenderer;
+    public Sprite[] _yellowStockSprites = new Sprite[5];
+
+    private Spray _spray;
+
     private PlayerInputReciever _playerInputReciever1;
     public PlayerInputReciever _playerInputReciever2;
     public ParticleSystem[] sprays = new ParticleSystem[4];
@@ -44,6 +58,11 @@ public class Square : MonoBehaviour
         _spriteRenderer = GetComponent<SpriteRenderer>();
         _buildGrid = FindObjectOfType<BuildGrid>();
         _colorSignal = FindObjectOfType<ColorSignal>();
+        _spray = FindObjectOfType<Spray>();
+        _redStockRenderer = GameObject.Find("Red").GetComponent<SpriteRenderer>();
+        _greenStockRenderer = GameObject.Find("Green").GetComponent<SpriteRenderer>();
+        _blueStockRenderer = GameObject.Find("Blue").GetComponent<SpriteRenderer>();
+        _yellowStockRenderer = GameObject.Find("Yellow").GetComponent<SpriteRenderer>();
 
         PlayerInputReciever[] recievers = FindObjectsOfType<PlayerInputReciever>();
         _playerInputReciever1 = recievers.First(i => i.PlayerIndex == PLAYER_INDEX1);
@@ -67,25 +86,41 @@ public class Square : MonoBehaviour
 
         if (_inFrontOfSpray)
         {
-            if (_playerInputReciever1.ButtonEast)
+            if (_playerInputReciever1.ButtonEast && _spray.red > 0)
             {
+                _spray.red--;
+
                 SetType(1);
+
                 FindObjectOfType<AudioManager>().Play("spray");
+                _redStockRenderer.sprite = _redStockSprites[_spray.red];
             }
-            else if (_playerInputReciever1.ButtonSouth)
+            else if (_playerInputReciever1.ButtonSouth && _spray.green > 0)
             {
+                _spray.green--;
+
                 SetType(2);
+
                 FindObjectOfType<AudioManager>().Play("spray");
+                _greenStockRenderer.sprite = _greenStockSprites[_spray.green];
             }
-            else if (_playerInputReciever1.ButtonWest)
+            else if (_playerInputReciever1.ButtonWest && _spray.blue > 0)
             {
+                _spray.blue--;
+
                 SetType(3);
+
                 FindObjectOfType<AudioManager>().Play("spray");
+                _blueStockRenderer.sprite = _blueStockSprites[_spray.blue];
             }
-            else if (_playerInputReciever1.ButtonNorth)
+            else if (_playerInputReciever1.ButtonNorth && _spray.yellow > 0)
             {
+                _spray.yellow--;
+
                 SetType(4);
+
                 FindObjectOfType<AudioManager>().Play("spray");
+                _yellowStockRenderer.sprite = _yellowStockSprites[_spray.yellow];
             }
         }
     }
